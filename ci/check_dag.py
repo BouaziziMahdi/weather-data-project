@@ -7,7 +7,7 @@ from airflow.models import DagBag
 class WeatherDagTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.bag = DagBag(dag_folder="/opt/airflow/dags", include_examples=False)
+        cls.bag = DagBag(dag_folder="/opt/airflow/dags")
         cls.dag = cls.bag.dags.get("weather_ingestion")
 
     def test_import_and_dependencies(self):
@@ -44,7 +44,7 @@ class WeatherDagTests(unittest.TestCase):
         for name in ["bronze", "silver", "gold", "gold_to_postgres"]:
             task = self.dag.get_task(name)
             self.assertTrue(Path(task.application).is_file(), task.application)
-            self.assertEqual(task.conn_id, "spark_default")
+            self.assertEqual(task._conn_id, "spark_default")
 
 
 if __name__ == "__main__":
